@@ -247,26 +247,13 @@ namespace ServiceBus.Adapter
                     {
                         if (CloudStorageAccount.TryParse(storageConnection, out CloudStorageAccount cloudStorageAccount))
                         {
-
-
-
-
                             var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-                            var cloudBlobContainer = cloudBlobClient.GetContainerReference(_blobDestinationContainerName);
-                            var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(destinationfileName);
-
-
+                            var cloudBlobContainer = cloudBlobClient.GetContainerReference(_blobDestinationContainerName);                    
                             var destinationdirectory = cloudBlobContainer.GetDirectoryReference(destinationDirectoryName);
-
-
-                            var blobDestinationList = await cloudBlobContainer.ListBlobsSegmentedAsync(string.Empty, false, Microsoft.Azure.Storage.Blob.BlobListingDetails.None, int.MaxValue, null, null, null);
-
-
+                            var cloudBlockBlob = destinationdirectory.GetBlockBlobReference(destinationfileName);
+                            // var blobDestinationList = await cloudBlobContainer.ListBlobsSegmentedAsync(string.Empty, false, Microsoft.Azure.Storage.Blob.BlobListingDetails.None, int.MaxValue, null, null, null);
                             //    bool directoryExists = destinationdirectory.GetDirectoryReference(destinationDirectoryName).ListBlobs()
                             //bool directoryExists = blobDirectory.ListBlobs().Count() > 0
-
-
-
                             await cloudBlockBlob.UploadFromStreamAsync(stream);
                             _logger.LogInformation("SuccessMessages");
 
